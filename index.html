@@ -8,22 +8,53 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+        body{
+            height: 100vh;
+        }
         label{
             color: black;
         }
-        body{
+        .mainContent{
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+        .toast-overlay{
+            /* From https://css.glass */
+            background: rgba(255, 255, 255, 0);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(2.5px);
+            -webkit-backdrop-filter: blur(2.5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .toast-notfication{
+            animation: toast 0.2s linear;
+        }
+
+        @keyframes toast {
+            from{ transform: scale(0.5); }
+            to{ transform: scale(1); }
+        }
     </style>
 </head>
 <body>
+
+    <div id="toast" class="toast-overlay hidden absolute top-0 z-10 w-full h-full flex flex-row justify-center items-center">
+        <div class="toast-notfication flex flex-row p-2 rounded bg-green-500 h-fit text-gray-100 ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+              </svg>
+            <p>Register Successfully</p>          
+        </div>
+    </div>
+    
+    <div class="mainContent py-5">
     <h1 class="text-4xl font-bold mx-auto">Build2Learn</h1>
     <fieldset class="fieldset text-black text-sm bg-base-200 border-base-300 rounded-box w-xs border p-4">
         <legend class="fieldset-legend">Build2Learn Feedback form</legend>
       
-        <label class="label">Your Sweat name please</label>
+        <label class="label">Your sweet name please</label>
         <input type="text" class="input" placeholder="" />
       
         <label class="label">Your Email please</label>
@@ -32,17 +63,17 @@
         <label class="label" for="">Gender</label>
         
         <div class="flex">
-            <label class="flex p-2 cursor-pointer">
+            <label class="flex items-center p-2 cursor-pointer">
                 <input type="radio" name="radio-6" class="radio radio-accent" />
                 <div class="title px-2">Male</div>
             </label>
         
-            <label class="flex  p-2 cursor-pointer">
+            <label class="flex items-center p-2 cursor-pointer">
                 <input type="radio" name="radio-6" class="radio radio-accent" />
                 <div class="title px-2">Female</div>
             </label>
         
-            <label class="flex p-2 cursor-pointer">
+            <label class="flex items-center p-2 cursor-pointer">
                 <input type="radio" name="radio-6" class="radio radio-accent" />
                 <div class="title px-2">Others</div>
             </label>
@@ -50,7 +81,7 @@
 
         <label class="label" for="">Feedback</label>
         <div class="relative">
-            <textarea type="email" rows="6" placeholder="Type your message" class="w-full bg-transparent rounded-md border border-stroke dark:border-dark-3 p-3 pl-12 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"></textarea>
+            <textarea type="email" rows="6" placeholder="Type your message" class="w-full bg-transparent rounded-md border-gray-300 border-stroke dark:border-dark-3 p-3 pl-12 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"></textarea>
             <span class="absolute top-[18px] left-4">
                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g opacity="0.8">
@@ -64,21 +95,32 @@
          <label class="label" for="">Ratings</label>
 
         <div class="rating">
-            <input type="radio" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="1 star" />
-            <input type="radio" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="2 star" checked="checked" />
-            <input type="radio" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="3 star" />
-            <input type="radio" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="4 star" />
-            <input type="radio" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="5 star" />
+            <input type="radio" value="1" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="1 star" checked="checked"/>
+            <input type="radio" value="2" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="2 star"  />
+            <input type="radio" value="3" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="3 star" />
+            <input type="radio" value="4" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="4 star" />
+            <input type="radio" value="5" name="rating-4" class="mask mask-star-2 bg-green-500" aria-label="5 star" />
         </div>
 
         <div class="flex gap-3 my-5">
             <input type="checkbox" checked="checked" class="checkbox checkbox-md" />    
-            <label class="label">Is this Hackathon is usefull?</label>
+            <label class="label">Is this Hackathon is useful for you?</label>
         </div>
         
-        <button class="btn btn-primary">Submit</button>
+        <button onclick="handleSubmit()" id="submit" class="btn btn-primary">Submit</button>
 
       </fieldset>
 
+    </div>
+
+    <script>
+        function handleSubmit(){
+            document.getElementById('toast').classList.toggle('hidden');
+            document.getElementById('submit').hidden = true;
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
